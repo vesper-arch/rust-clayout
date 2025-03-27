@@ -28,6 +28,7 @@ pub mod clay_raylib {
         let (rl, thread) = raylib::init()
             .size(640, 480)
             .title("hell")
+            .resizable()
             .build();
 
         return (rl, thread)
