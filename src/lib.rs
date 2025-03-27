@@ -37,7 +37,7 @@ pub mod clay_raylib {
         draw_handle.draw_rectangle_rounded(Rectangle { x: 5.0, y: 5.0, width: test_obj.sizing.x as f32, height: test_obj.sizing.y as f32},
             test_obj.border_radius,
             1,
-            Color::WHITE);
+            Color::VIOLET);
     }
 }
 
