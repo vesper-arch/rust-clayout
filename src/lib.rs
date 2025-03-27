@@ -6,8 +6,6 @@ pub mod clay_main {
         pub y: i32,
     }
 
-    pub struct ClayBorderRadius(pub u32, pub u32, pub u32, pub u32);
-
     pub enum ClayChildLayoutDirection {
         LeftToRight,
         TopToBottom,
@@ -17,7 +15,7 @@ pub mod clay_main {
         pub sizing: ClaySizingModeFixed,
         pub color: ClayColor,
         pub layout_direction: ClayChildLayoutDirection,
-        pub border_radius: ClayBorderRadius,
+        pub border_radius: f32,
         pub padding: (u32, u32, u32, u32)
     }
 }
@@ -36,7 +34,10 @@ pub mod clay_raylib {
     }
 
     pub fn draw_object(test_obj: &clay_main::ClayObject, mut draw_handle: RaylibDrawHandle) {
-        draw_handle.draw_rectangle(5, 5, test_obj.sizing.x, test_obj.sizing.y, Color::BLUEVIOLET);
+        draw_handle.draw_rectangle_rounded(Rectangle { x: 5.0, y: 5.0, width: test_obj.sizing.x as f32, height: test_obj.sizing.y as f32},
+            test_obj.border_radius,
+            1,
+            Color::WHITE);
     }
 }
 
