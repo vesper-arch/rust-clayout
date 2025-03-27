@@ -1,12 +1,12 @@
 pub mod clay_main {
-    pub struct ClayColor(u8, u8, u8);
+    pub struct ClayColor(pub u8, pub u8, pub u8);
 
     pub struct ClaySizingModeFixed {
         pub x: i32,
         pub y: i32,
     }
 
-    pub struct ClayBorderRadius(u32, u32, u32, u32);
+    pub struct ClayBorderRadius(pub u32, pub u32, pub u32, pub u32);
 
     pub enum ClayChildLayoutDirection {
         LeftToRight,
