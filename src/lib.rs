@@ -24,17 +24,13 @@ mod clay_raylib {
     use raylib::prelude::*;
     use super::*;
 
-    pub fn raylib_init() {
-        let (mut rl, thread) = raylib::init()
+    pub fn raylib_init() -> (RaylibHandle, RaylibThread){
+        let (rl, thread) = raylib::init()
             .size(640, 480)
             .title("hell")
             .build();
 
-        while !rl.window_should_close() {
-            let mut d = rl.begin_drawing(&thread);
-             
-            d.clear_background(Color::WHITE);
-        }
+        return (rl, thread)
     }
 
     pub fn draw_object(test_obj: ClayObject, mut draw_handle: RaylibDrawHandle) {
