@@ -20,7 +20,7 @@ struct ClayObject {
     padding: (u32, u32, u32, u32)
 }
 
-mod clay_raylib {
+pub mod clay_raylib {
     use raylib::prelude::*;
     use super::*;
 
