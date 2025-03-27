@@ -35,7 +35,7 @@ pub mod clay_raylib {
         return (rl, thread)
     }
 
-    pub fn draw_object(test_obj: clay_main::ClayObject, mut draw_handle: RaylibDrawHandle) {
+    pub fn draw_object(test_obj: &clay_main::ClayObject, mut draw_handle: RaylibDrawHandle) {
         draw_handle.draw_rectangle(5, 5, test_obj.sizing.x, test_obj.sizing.y, Color::BLUEVIOLET);
     }
 }
