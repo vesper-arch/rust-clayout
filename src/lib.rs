@@ -24,7 +24,7 @@ pub mod clay_main {
         pub color: ClayColor,
         pub layout_direction: ClayChildLayoutDirection,
         pub border_radius: f32,
-        pub padding: (u32, u32, u32, u32),
+        pub padding: (f32, f32, f32, f32),
         // fields for finalized positions and sizes. Not exposed to the user
         pub(crate) final_size_y: f32,
         pub(crate) final_size_x: f32,
@@ -39,6 +39,11 @@ pub mod clay_main {
                 ClayObjectSizing::Fit(sizes) => {self.final_size_x = sizes.0; self.final_size_y = sizes.1},
                 ClayObjectSizing::Grow(sizes) => {self.final_size_x = sizes.0; self.final_size_y = sizes.1},
             }
+        }
+
+        pub fn calculate_position(&mut self) {
+            self.final_pos_x = self.padding.0;
+            self.final_pos_y = self.padding.1;
         }
     }
 }
@@ -58,7 +63,8 @@ pub mod clay_raylib {
     }
 
     pub fn draw_object(test_obj: &clay_main::ClayObject, mut draw_handle: RaylibDrawHandle) {
-        draw_handle.draw_rectangle_rounded(Rectangle { x: 5.0, y: 5.0, width: test_obj.final_size_x, height: test_obj.final_size_y},
+        draw_handle.draw_rectangle_rounded(Rectangle { x: test_obj.final_pos_x, y: test_obj.final_pos_y,
+            width: test_obj.final_size_x, height: test_obj.final_size_y},
             test_obj.border_radius,
             1,
             Color::VIOLET);
