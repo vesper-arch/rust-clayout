@@ -33,6 +33,20 @@ pub mod clay_main {
     }
 
     impl ClayObject {
+        pub fn new(sizing: ClayObjectSizing, color: ClayColor, layout_direction: ClayChildLayoutDirection, border_radius: f32, padding: (f32, f32, f32, f32)) -> Self {
+            Self {
+                sizing,
+                color,
+                layout_direction,
+                border_radius,
+                padding,
+                final_size_y: 0.0,
+                final_size_x: 0.0,
+                final_pos_x: 0.0,
+                final_pos_y: 0.0,
+            }
+        }
+
         pub fn calculate_size(&mut self) {
             match &self.sizing {
                 ClayObjectSizing::Fixed(x, y) => {self.final_size_x = *x; self.final_size_y = *y},
