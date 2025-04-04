@@ -76,7 +76,9 @@ pub mod clay_raylib {
         return (rl, thread)
     }
 
-    pub fn draw_object(test_obj: &clay_main::ClayObject, mut draw_handle: RaylibDrawHandle) {
+    pub fn draw_object(test_obj: &mut clay_main::ClayObject, mut draw_handle: RaylibDrawHandle) {
+        test_obj.calculate_size();
+        test_obj.calculate_position();
         draw_handle.draw_rectangle_rounded(Rectangle { x: test_obj.final_pos_x, y: test_obj.final_pos_y,
             width: test_obj.final_size_x, height: test_obj.final_size_y},
             test_obj.border_radius,
