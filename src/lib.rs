@@ -1,12 +1,12 @@
 pub mod clay_main {
     pub struct ClayColor(pub u8, pub u8, pub u8);
 
-    // Always the same size.
-    pub struct ClaySizingModeFixed(pub f32, pub f32);
-    // Grows to fill the remaining availble space in the parent container
-    pub struct ClaySizingModeGrow(pub f32, pub f32);
-    // Fits to the sizes of all child objects
-    pub struct ClaySizingModeFit(pub f32, pub f32);
+    // // Always the same size.
+    // pub struct ClaySizingModeFixed(pub f32, pub f32);
+    // // Grows to fill the remaining availble space in the parent container
+    // pub struct ClaySizingModeGrow(pub f32, pub f32);
+    // // Fits to the sizes of all child objects
+    // pub struct ClaySizingModeFit(pub f32, pub f32);
 
     pub enum ClayChildLayoutDirection {
         LeftToRight,
@@ -14,9 +14,9 @@ pub mod clay_main {
     }
 
     pub enum ClayObjectSizing {
-        Fixed(ClaySizingModeFixed),
-        Fit(ClaySizingModeFit),
-        Grow(ClaySizingModeGrow)
+        Fixed(f32, f32),
+        Fit(f32, f32),
+        Grow(f32, f32)
     }
 
     pub struct ClayObject {
@@ -35,9 +35,9 @@ pub mod clay_main {
     impl ClayObject {
         pub fn calculate_size(&mut self) {
             match &self.sizing {
-                ClayObjectSizing::Fixed(sizes) => {self.final_size_x = sizes.0; self.final_size_y = sizes.1},
-                ClayObjectSizing::Fit(sizes) => {self.final_size_x = sizes.0; self.final_size_y = sizes.1},
-                ClayObjectSizing::Grow(sizes) => {self.final_size_x = sizes.0; self.final_size_y = sizes.1},
+                ClayObjectSizing::Fixed(x, y) => {self.final_size_x = *x; self.final_size_y = *y},
+                ClayObjectSizing::Fit(x, y) => {self.final_size_x = *x; self.final_size_y = *y},
+                ClayObjectSizing::Grow(x, y) => {self.final_size_x = *x; self.final_size_y = *y},
             }
         }
 
