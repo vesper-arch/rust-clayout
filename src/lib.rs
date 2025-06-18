@@ -65,16 +65,16 @@ pub mod clay_main {
     }
 
     pub struct Sizing {
-        width: SizingMode,
-        height: SizingMode
+        pub width: SizingMode,
+        pub height: SizingMode
     }
 
     impl Sizing {
-        fn new(width: SizingMode, height: SizingMode) -> Self {
+        pub fn new(width: SizingMode, height: SizingMode) -> Self {
             Sizing {width, height}
         }
 
-        fn both(size: SizingMode) -> Self {
+        pub fn both(size: SizingMode) -> Self {
             Sizing {width: size, height: size}
         }
     }
@@ -106,11 +106,11 @@ pub mod clay_main {
     }
 
     impl CornerRadius {
-        fn new(top_right: i32, top_left: i32, bottom_left: i32, bottom_right: i32) -> Self {
+        pub fn new(top_right: i32, top_left: i32, bottom_left: i32, bottom_right: i32) -> Self {
             CornerRadius {top_right, top_left, bottom_left, bottom_right}
         }
 
-        fn all(radius: i32) -> Self {
+        pub fn all(radius: i32) -> Self {
             CornerRadius {top_right: radius, top_left: radius, bottom_left: radius, bottom_right: radius}
         }
     }
