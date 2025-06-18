@@ -123,15 +123,15 @@ pub mod clay_main {
     }
 
     impl Padding {
-        fn new(left: i32, right: i32, top: i32, bottom: i32) -> Self {
+        pub fn new(left: i32, right: i32, top: i32, bottom: i32) -> Self {
             Padding {left, right, top, bottom}
         }
 
-        fn hv(left_right: i32, top_bottom: i32) -> Self {
+        pub fn hv(left_right: i32, top_bottom: i32) -> Self {
             Padding {left: left_right, right: left_right, top: top_bottom, bottom: top_bottom}
         }
 
-        fn all(padding: i32) -> Self {
+        pub fn all(padding: i32) -> Self {
             Padding {left: padding, right: padding, top: padding, bottom: padding}
         }
     }
