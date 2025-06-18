@@ -142,8 +142,8 @@ pub mod clay_main {
     pub enum ChildYAlignment { AlignYTop, AlignYCenter, AlignYBottom }
 
     pub struct ChildAlignment {
-        x: ChildXAlignment,
-        y: ChildYAlignment,
+        pub x: ChildXAlignment,
+        pub y: ChildYAlignment,
     }
 
     impl ChildAlignment {
