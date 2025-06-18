@@ -1,10 +1,12 @@
 pub mod clay_main {
+    use std::cmp::max;
+
     // ClayContext is the goddamn backbone of this whole library. It lets functions look at the
     // current open elements so the UI Heirarchy can be constructed. This will be extended to store
     // the info of the layout itself but that's a lotta work and i dont give a shit right now.
     // There should only be a single one of these in existence at any given time. If there are
     // multiple uhh shit's gonna break.
-    struct ClayContext {
+    pub struct ClayContext {
         layout_elements: Vec<Node>,
 
         open_layout_elements: Vec<usize>
@@ -15,6 +17,15 @@ pub mod clay_main {
             let last_opened_element_index: usize = *self.open_layout_elements.last().expect("There are no currently opened elements");
             
             Some(self.layout_elements.get_mut(last_opened_element_index).unwrap())
+        }
+    }
+
+    impl Default for ClayContext {
+        fn default() -> Self {
+            Self {
+                layout_elements: vec![],
+                open_layout_elements: vec![]
+            }
         }
     }
 
@@ -38,8 +49,9 @@ pub mod clay_main {
        }
     }
 
-    pub struct Color( u8, u8, u8, u8 );
+    pub struct Color( pub u8, pub u8, pub u8, pub u8 );
 
+    #[derive(PartialEq)]
     pub enum ChildLayoutDirection {
         LeftToRight,
         TopToBottom,
@@ -64,6 +76,25 @@ pub mod clay_main {
 
         fn both(size: SizingMode) -> Self {
             Sizing {width: size, height: size}
+        }
+    }
+
+    impl SizingMode {
+        fn get_as_float(&self) -> f32 {
+            match self {
+                // Not completely sure why the deref is necessary but no more compiler error
+                SizingMode::Fixed(size) => *size as f32,
+                SizingMode::Fit => panic!("Given that fit should have been taken care of already, this is weird error."),
+                SizingMode::Grow => 0.0,
+            }
+        }
+
+        fn get_as_int(&self) -> i32 {
+            match self {
+                SizingMode::Fixed(size) => *size,
+                SizingMode::Fit => panic!("Given that fit should have been taken care of already, this is weird error."),
+                SizingMode::Grow => 0,
+            }
         }
     }
 
@@ -146,16 +177,16 @@ pub mod clay_main {
         }
     }
 
-    pub(crate) struct ClayElement {
-        pub(crate) id: Option<String>,
-        pub(crate) layout: LayoutConfig,
-        pub(crate) color: Color,
-        pub(crate) corner_radius: CornerRadius,
+    pub struct ClayElement {
+        pub id: Option<String>,
+        pub layout: LayoutConfig,
+        pub color: Color,
+        pub corner_radius: CornerRadius,
         // fields for finalized positions and sizes. Not exposed to the user
-        pub(crate) final_size_y: f32,
-        pub(crate) final_size_x: f32,
-        pub(crate) final_pos_x: f32,
-        pub(crate) final_pos_y: f32,
+        pub final_size_y: f32,
+        pub final_size_x: f32,
+        pub final_pos_x: f32,
+        pub final_pos_y: f32,
     }
 
     impl Default for ClayElement {
@@ -184,7 +215,7 @@ pub mod clay_main {
         // in the future this will have configs for floating, scroll, border, and custom elements
     }
 
-    fn open_element(context: &mut ClayContext) {
+    pub fn open_element(context: &mut ClayContext) {
         let mut new_element = ClayElement::default();
         let new_element_index = context.layout_elements.len();
         let mut parent_element: usize = 0;
@@ -198,7 +229,7 @@ pub mod clay_main {
         context.layout_elements.push(Node::new(new_element, parent_element));
     }
 
-    fn configure_open_element(context: &mut ClayContext, config: ElementDeclaration) {
+    pub fn configure_open_element(context: &mut ClayContext, config: ElementDeclaration) {
         let last_opened_element_index = *context.open_layout_elements.last().unwrap();
         let last_opened_element = context.layout_elements.get_mut(last_opened_element_index).unwrap();
 
@@ -208,12 +239,27 @@ pub mod clay_main {
         last_opened_element.element.corner_radius = config.corner_radius;
     }
 
-    fn close_element(context: &mut ClayContext) {
-        // Size containers
-        let last_opened_element = context.get_last_opened_element().unwrap();
-        let parent_element = last_opened_element.get_parent_element(context);
-        if parent_element.element.layout.sizing.width == SizingMode::Fit {
-            parent_element.element.final_size_x += last_opened_element.element.layout.sizing.width;
+    pub fn close_element(context: &mut ClayContext) {
+        let layout_slice = &mut context.layout_elements[..];
+        let last_opened_element = *context.open_layout_elements.last().unwrap();
+        let parent_element = layout_slice[last_opened_element].parent.unwrap();
+        // index 0: parent node | index 1: last opened node
+        let current_elements = layout_slice.get_disjoint_mut([last_opened_element, parent_element]).unwrap();
+
+        // Fit Sizing
+        if current_elements[0].element.layout.sizing.width == SizingMode::Fit {
+            if current_elements[0].element.layout.layout_direction == ChildLayoutDirection::LeftToRight {
+                current_elements[0].element.final_size_x += current_elements[1].element.layout.sizing.width.get_as_float();
+
+                current_elements[0].element.final_size_y = max(current_elements[0].element.final_size_y as i32, current_elements[1].element.layout.sizing.height.get_as_int()) as f32;
+            } else {
+                current_elements[0].element.final_size_y += current_elements[1].element.layout.sizing.height.get_as_float();
+
+                current_elements[0].element.final_size_x = max(current_elements[0].element.final_size_x as i32, current_elements[1].element.layout.sizing.width.get_as_int()) as f32;
+            }
+
+            current_elements[0].element.final_size_x += (current_elements[0].element.layout.padding.left + current_elements[0].element.layout.padding.right) as f32;
+            current_elements[0].element.final_size_y += (current_elements[0].element.layout.padding.top + current_elements[0].element.layout.padding.bottom) as f32;
         }
 
         context.open_layout_elements.pop();
@@ -234,15 +280,23 @@ pub mod clay_raylib {
         return (rl, thread)
     }
 
-    // pub fn draw_object(test_obj: &mut clay_main::ClayElement, mut draw_handle: RaylibDrawHandle) {
-    //     test_obj.calculate_size();
-    //     test_obj.calculate_position();
-    //     draw_handle.draw_rectangle_rounded(Rectangle { x: test_obj.final_pos_x, y: test_obj.final_pos_y,
-    //         width: test_obj.final_size_x, height: test_obj.final_size_y},
-    //         test_obj.border_radius.0,
-    //         1,
-    //         Color::VIOLET);
-    // }
+    pub fn clay_to_raylib_rect(object: clay_main::ClayElement) -> Rectangle {
+        Rectangle {
+            x: object.final_pos_x,
+            y: object.final_pos_y,
+            width: object.final_size_x,
+            height: object.final_size_x
+        }
+    }
+
+    pub fn clay_to_raylib_color(color: clay_main::Color) -> Color {
+        Color {
+            r: color.0,
+            g: color.1,
+            b: color.2,
+            a: 255
+        }
+    }
 }
 
 #[cfg(test)]
