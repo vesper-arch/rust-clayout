@@ -18,6 +18,14 @@ pub mod clay_main {
             
             Some(self.layout_elements.get_mut(last_opened_element_index).unwrap())
         }
+
+        pub fn get_all_elements(&mut self) -> Vec<&ClayElement> {
+            let mut temp: Vec<&ClayElement> = vec![];
+            for node in &self.layout_elements[..] {
+                temp.push(&node.element);
+            }
+            temp
+        }
     }
 
     impl Default for ClayContext {
