@@ -288,7 +288,7 @@ pub mod clay_raylib {
         return (rl, thread)
     }
 
-    pub fn clay_to_raylib_rect(object: clay_main::ClayElement) -> Rectangle {
+    pub fn clay_to_raylib_rect(object: &clay_main::ClayElement) -> Rectangle {
         Rectangle {
             x: object.final_pos_x,
             y: object.final_pos_y,
@@ -297,7 +297,7 @@ pub mod clay_raylib {
         }
     }
 
-    pub fn clay_to_raylib_color(color: clay_main::Color) -> Color {
+    pub fn clay_to_raylib_color(color: &clay_main::Color) -> Color {
         Color {
             r: color.0,
             g: color.1,
