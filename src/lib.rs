@@ -107,10 +107,10 @@ pub mod clay_main {
     }
 
     pub struct CornerRadius {
-        top_right: i32,
-        top_left: i32,
-        bottom_left: i32,
-        bottom_right: i32
+        pub top_right: i32,
+        pub top_left: i32,
+        pub bottom_left: i32,
+        pub bottom_right: i32
     }
 
     impl CornerRadius {
