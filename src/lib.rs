@@ -254,6 +254,17 @@ pub mod clay_main {
         // index 0: parent node | index 1: last opened node
         let current_elements = layout_slice.get_disjoint_mut([last_opened_element]).unwrap();
 
+        // Fixed Sizing
+        match current_elements[1].element.layout.sizing.width {
+            SizingMode::Fixed(size) => {current_elements[1].element.final_size_x = size as f32},
+            SizingMode::Fit => {},
+            SizingMode::Grow => {},
+        }
+        match current_elements[1].element.layout.sizing.height {
+            SizingMode::Fixed(size) => {current_elements[1].element.final_size_y = size as f32},
+            SizingMode::Fit => {},
+            SizingMode::Grow => {},
+        }
         // Fit Sizing
         // if current_elements[0].element.layout.sizing.width == SizingMode::Fit {
         //     if current_elements[0].element.layout.layout_direction == ChildLayoutDirection::LeftToRight {
