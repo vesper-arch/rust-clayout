@@ -250,25 +250,25 @@ pub mod clay_main {
     pub fn close_element(context: &mut ClayContext) {
         let layout_slice = &mut context.layout_elements[..];
         let last_opened_element = *context.open_layout_elements.last().unwrap();
-        let parent_element = layout_slice[last_opened_element].parent.unwrap();
+        // let parent_element = layout_slice[last_opened_element].parent.unwrap();
         // index 0: parent node | index 1: last opened node
-        let current_elements = layout_slice.get_disjoint_mut([last_opened_element, parent_element]).unwrap();
+        let current_elements = layout_slice.get_disjoint_mut([last_opened_element]).unwrap();
 
         // Fit Sizing
-        if current_elements[0].element.layout.sizing.width == SizingMode::Fit {
-            if current_elements[0].element.layout.layout_direction == ChildLayoutDirection::LeftToRight {
-                current_elements[0].element.final_size_x += current_elements[1].element.layout.sizing.width.get_as_float();
-
-                current_elements[0].element.final_size_y = max(current_elements[0].element.final_size_y as i32, current_elements[1].element.layout.sizing.height.get_as_int()) as f32;
-            } else {
-                current_elements[0].element.final_size_y += current_elements[1].element.layout.sizing.height.get_as_float();
-
-                current_elements[0].element.final_size_x = max(current_elements[0].element.final_size_x as i32, current_elements[1].element.layout.sizing.width.get_as_int()) as f32;
-            }
-
-            current_elements[0].element.final_size_x += (current_elements[0].element.layout.padding.left + current_elements[0].element.layout.padding.right) as f32;
-            current_elements[0].element.final_size_y += (current_elements[0].element.layout.padding.top + current_elements[0].element.layout.padding.bottom) as f32;
-        }
+        // if current_elements[0].element.layout.sizing.width == SizingMode::Fit {
+        //     if current_elements[0].element.layout.layout_direction == ChildLayoutDirection::LeftToRight {
+        //         current_elements[0].element.final_size_x += current_elements[1].element.layout.sizing.width.get_as_float();
+        //
+        //         current_elements[0].element.final_size_y = max(current_elements[0].element.final_size_y as i32, current_elements[1].element.layout.sizing.height.get_as_int()) as f32;
+        //     } else {
+        //         current_elements[0].element.final_size_y += current_elements[1].element.layout.sizing.height.get_as_float();
+        //
+        //         current_elements[0].element.final_size_x = max(current_elements[0].element.final_size_x as i32, current_elements[1].element.layout.sizing.width.get_as_int()) as f32;
+        //     }
+        //
+        //     current_elements[0].element.final_size_x += (current_elements[0].element.layout.padding.left + current_elements[0].element.layout.padding.right) as f32;
+        //     current_elements[0].element.final_size_y += (current_elements[0].element.layout.padding.top + current_elements[0].element.layout.padding.bottom) as f32;
+        // }
 
         context.open_layout_elements.pop();
     }
