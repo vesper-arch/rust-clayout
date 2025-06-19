@@ -107,18 +107,18 @@ pub mod clay_main {
     }
 
     pub struct CornerRadius {
-        pub top_right: i32,
-        pub top_left: i32,
-        pub bottom_left: i32,
-        pub bottom_right: i32
+        pub top_right: f32,
+        pub top_left: f32,
+        pub bottom_left: f32,
+        pub bottom_right: f32
     }
 
     impl CornerRadius {
-        pub fn new(top_right: i32, top_left: i32, bottom_left: i32, bottom_right: i32) -> Self {
+        pub fn new(top_right: f32, top_left: f32, bottom_left: f32, bottom_right: f32) -> Self {
             CornerRadius {top_right, top_left, bottom_left, bottom_right}
         }
 
-        pub fn all(radius: i32) -> Self {
+        pub fn all(radius: f32) -> Self {
             CornerRadius {top_right: radius, top_left: radius, bottom_left: radius, bottom_right: radius}
         }
     }
