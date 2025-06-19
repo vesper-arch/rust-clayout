@@ -255,13 +255,13 @@ pub mod clay_main {
         let current_elements = layout_slice.get_disjoint_mut([last_opened_element]).unwrap();
 
         // Fixed Sizing
-        match current_elements[1].element.layout.sizing.width {
-            SizingMode::Fixed(size) => {current_elements[1].element.final_size_x = size as f32},
+        match current_elements[0].element.layout.sizing.width {
+            SizingMode::Fixed(size) => {current_elements[0].element.final_size_x = size as f32},
             SizingMode::Fit => {},
             SizingMode::Grow => {},
         }
-        match current_elements[1].element.layout.sizing.height {
-            SizingMode::Fixed(size) => {current_elements[1].element.final_size_y = size as f32},
+        match current_elements[0].element.layout.sizing.height {
+            SizingMode::Fixed(size) => {current_elements[0].element.final_size_y = size as f32},
             SizingMode::Fit => {},
             SizingMode::Grow => {},
         }
