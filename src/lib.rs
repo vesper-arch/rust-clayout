@@ -203,7 +203,7 @@ pub mod clay_main {
                 id: None,
                 layout: LayoutConfig::default(),
                 color: Color(0, 0, 0, 255),
-                corner_radius: CornerRadius::all(0),
+                corner_radius: CornerRadius::all(0.0),
                 final_pos_y: 0.0,
                 final_pos_x: 0.0,
                 final_size_y: 0.0,
